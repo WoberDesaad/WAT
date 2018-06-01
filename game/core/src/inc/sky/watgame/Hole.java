@@ -1,5 +1,9 @@
 package inc.sky.watgame;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
+
 public class Hole {
     public enum states{
         empty,
@@ -9,15 +13,20 @@ public class Hole {
     private states state;
     private int x, y, width, height;
 
+    private Texture img;
+
     public Hole(int x, int y, int width, int height){
         this.state = states.empty;
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
+        this.img = new Texture("badlogic.jpg");
+
     }
 
-    public void render(){
+    public void render(SpriteBatch batch){
+        batch.draw(this.img, this.x, this.y);
         //TODO: Draw Back of hole
         if(this.state == states.empty){
             //TODO: Draw character in animation state
@@ -43,5 +52,9 @@ public class Hole {
      */
     public boolean hits(int x, int y){
         return (x > this.x && x < this.x+this.width && y > this.y && y > this.y + this.height);
+    }
+
+    public void dispose(){
+        this.img.dispose();
     }
 }
