@@ -52,7 +52,7 @@ public class WatGame extends ApplicationAdapter {
 		batch.begin();
 	    //TODO: Draw Background
 		//TODO: Draw Board
-		font.draw(batch, Integer.toString(hits), 100, ScreenY-100);
+		font.draw(batch, "fps: " + Float.toString(1/dt), 100, ScreenY-100);
 		gb.render(batch);
 		//TODO: Draw GUI
 		batch.end();

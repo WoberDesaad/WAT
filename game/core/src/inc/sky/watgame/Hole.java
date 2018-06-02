@@ -3,11 +3,16 @@ package inc.sky.watgame;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import java.util.Map;
+
 
 public class Hole {
     public enum states{
         empty,
-        occupied
+        movingUp,
+        occupied,
+        hit,
+        movingDown
     };
 
     private states state;
@@ -26,24 +31,54 @@ public class Hole {
     }
 
     public void render(SpriteBatch batch){
+        //Dummy draw for now
         batch.draw(this.img, this.x, this.y);
         //TODO: Draw Back of hole
-        if(this.state == states.empty){
-            //TODO: Draw character in animation state
+        switch(this.state) {
+            case empty:
+                //Do nothing just like this
+                break;
+            case movingUp:
+                //Character moving from empty to occupied
+                break;
+            case occupied:
+                //Character in position for some amount of time
+                break;
+            case hit:
+                //character hit, moves to moving down after a few seconds
+                break;
+            case movingDown:
+                //character returning to empty state
+                break;
+            default:
+                System.err.println("You should not be here!");
+                System.exit(-1);
         }
         //TODO: Draw Front of hole
     }
 
+    /**
+     * This method should update the animation state that the hole is in
+     * @param dt delta time
+     */
     public void update(float dt){
-        if(this.state == states.empty){
-            //TODO: Randomly change to occupied
-        }
-        if(this.state == states.occupied){
-            //TODO: Add dt to animation time, Change frame if necessary
+        switch(this.state) {
+            case empty:
+                break;
+            case movingUp:
+                break;
+            case occupied:
+                break;
+            case hit:
+                break;
+            case movingDown:
+                break;
+            default:
+                System.err.println("You should not be here!");
+                System.exit(-1);
         }
     }
 
-    //TODO: Add method to get hole to have a mole
 
     /**
      * @param x The x position of the finger
