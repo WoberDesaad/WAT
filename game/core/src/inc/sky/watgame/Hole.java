@@ -3,7 +3,9 @@ package inc.sky.watgame;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 
 public class Hole {
@@ -17,22 +19,32 @@ public class Hole {
 
     private states state;
     private int x, y, width, height;
+    float stateTime;
 
-    private Texture img;
+    private HashMap<states, Texture> imgs;
 
-    public Hole(int x, int y, int width, int height){
+    Input in;
+
+    public Hole(int x, int y, int width, int height, Input in){
+        this.in = in;
+        imgs = new HashMap<states, Texture>();
+        imgs.put(states.empty, new Texture("green.jpg"));
+        imgs.put(states.movingUp, new Texture("yellow.jpg"));
+        imgs.put(states.movingDown, new Texture("yellow.jpg"));
+        imgs.put(states.hit, new Texture("blue.jpg"));
+        imgs.put(states.occupied, new Texture("red.jpg"));
+
         this.state = states.empty;
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
-        this.img = new Texture("badlogic.jpg");
 
     }
 
     public void render(SpriteBatch batch){
         //Dummy draw for now
-        batch.draw(this.img, this.x, this.y);
+        batch.draw(this.imgs.get(this.state), this.x, this.y);
         //TODO: Draw Back of hole
         switch(this.state) {
             case empty:
@@ -62,16 +74,53 @@ public class Hole {
      * @param dt delta time
      */
     public void update(float dt){
+        Random r = new Random();
         switch(this.state) {
             case empty:
+                if(r.nextFloat() < 0.001){
+                    this.state = states.movingUp;
+                    this.stateTime = 0;
+                }
                 break;
             case movingUp:
+                stateTime += dt;
+                if(stateTime > 1){
+                    this.state = states.occupied;
+                    stateTime = 0;
+                }
                 break;
             case occupied:
+                if(this.in.isTouching()){
+                    int x = in.touchPosition().x;
+                    int y = in.touchPosition().y;
+                    System.out.print(x);
+                    System.out.print(" ");
+                    System.out.println(y);
+                    if(x > this.x && x < this.x+this.width && y > this.y && y > this.y + this.height){
+                        this.state = states.hit;
+                        this.stateTime = 0;
+                    }
+                }
+
+                stateTime += dt;
+                if(stateTime > 2){
+                    this.state = states.movingDown;
+                    stateTime = 0;
+                }
                 break;
             case hit:
+                stateTime += dt;
+                if(stateTime > 0.5){
+                    this.state = states.empty;
+                    stateTime = 0;
+                }
                 break;
             case movingDown:
+                stateTime += dt;
+                if(stateTime > 1){
+                    this.state = states.empty;
+                    stateTime = 0;
+                }
                 break;
             default:
                 System.err.println("You should not be here!");
@@ -79,17 +128,11 @@ public class Hole {
         }
     }
 
-
-    /**
-     * @param x The x position of the finger
-     * @param y The y position of the finger
-     * @return True if the finger is within the hole's hitbox
-     */
-    public boolean hits(int x, int y){
-        return (x > this.x && x < this.x+this.width && y > this.y && y > this.y + this.height);
-    }
-
     public void dispose(){
-        this.img.dispose();
+        for(states s : this.imgs.keySet()){
+            Texture t = this.imgs.get(s);
+            this.imgs.remove(t);
+            t.dispose();
+        }
     }
 }

@@ -6,13 +6,14 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 public class GameBoard {
     //TODO: Add functionality to hold holes... Maybe not ArrayLists
     private Hole[][] holes;
-    public GameBoard(int rows, int cols, int x, int y, int width, int height){
+    private Input in;
+    public GameBoard(int rows, int cols, int x, int y, int width, int height, Input in){
         this.holes = new Hole[cols][rows];
-
+        this.in = in;
         //TODO: INIT ALL HOLES
         for(int i = 0; i < rows; i++){
             for(int j = 0; j < cols; j++){
-                holes[j][i] = new Hole(x + j * width / cols, y + i * height / rows, width / cols, height / rows);
+                holes[j][i] = new Hole(x + j * width / cols, y + i * height / rows, width / cols, height / rows, this.in);
             }
         }
     }
@@ -42,16 +43,4 @@ public class GameBoard {
             }
         }
     }
-
-    public boolean checkForHits(Point p){
-        for(Hole[] ha : this.holes){
-            for(Hole h : ha){
-                if(h.hits(p.x, p.y)){
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
 }
