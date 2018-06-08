@@ -14,7 +14,8 @@ public class Hole {
         movingUp,
         occupied,
         hit,
-        movingDown
+        movingDown,
+        missed
     };
 
     private states state;
@@ -28,11 +29,12 @@ public class Hole {
     public Hole(int x, int y, int width, int height, Input in){
         this.in = in;
         imgs = new HashMap<states, Texture>();
-        imgs.put(states.empty, new Texture("green.jpg"));
+        imgs.put(states.empty, new Texture("black.jpg"));
         imgs.put(states.movingUp, new Texture("yellow.jpg"));
         imgs.put(states.movingDown, new Texture("yellow.jpg"));
         imgs.put(states.hit, new Texture("blue.jpg"));
         imgs.put(states.occupied, new Texture("red.jpg"));
+        imgs.put(states.missed, new Texture("purple.jpg"));
 
         this.state = states.empty;
         this.x = x;
@@ -45,28 +47,6 @@ public class Hole {
     public void render(SpriteBatch batch){
         //Dummy draw for now
         batch.draw(this.imgs.get(this.state), this.x, this.y);
-        //TODO: Draw Back of hole
-        switch(this.state) {
-            case empty:
-                //Do nothing just like this
-                break;
-            case movingUp:
-                //Character moving from empty to occupied
-                break;
-            case occupied:
-                //Character in position for some amount of time
-                break;
-            case hit:
-                //character hit, moves to moving down after a few seconds
-                break;
-            case movingDown:
-                //character returning to empty state
-                break;
-            default:
-                System.err.println("You should not be here!");
-                System.exit(-1);
-        }
-        //TODO: Draw Front of hole
     }
 
     /**
@@ -77,7 +57,7 @@ public class Hole {
         Random r = new Random();
         switch(this.state) {
             case empty:
-                if(r.nextFloat() < 0.001){
+                if(r.nextFloat() < 0.01){
                     this.state = states.movingUp;
                     this.stateTime = 0;
                 }
@@ -88,24 +68,23 @@ public class Hole {
                     this.state = states.occupied;
                     stateTime = 0;
                 }
+
+                if(this.isHit()){
+                    this.state = states.missed;
+                    this.stateTime = 0;
+                }
                 break;
             case occupied:
-                if(this.in.isTouching()){
-                    int x = in.touchPosition().x;
-                    int y = in.touchPosition().y;
-                    System.out.print(x);
-                    System.out.print(" ");
-                    System.out.println(y);
-                    if(x > this.x && x < this.x+this.width && y > this.y && y > this.y + this.height){
-                        this.state = states.hit;
-                        this.stateTime = 0;
-                    }
-                }
-
                 stateTime += dt;
                 if(stateTime > 2){
                     this.state = states.movingDown;
                     stateTime = 0;
+                }
+
+                if(this.isHit()){
+                    this.state = states.hit;
+                    this.stateTime = 0;
+                    ScoreBoard.getScoreBoard().addToScore(10);
                 }
                 break;
             case hit:
@@ -122,10 +101,45 @@ public class Hole {
                     stateTime = 0;
                 }
                 break;
+            case missed:
+                stateTime += dt;
+                if(stateTime > 1){
+                    this.state = states.empty;
+                    stateTime = 0;
+                }
+                break;
             default:
                 System.err.println("You should not be here!");
                 System.exit(-1);
         }
+    }
+
+    public boolean isHit(){
+        if(this.in.isTouching()){
+            Point tp = in.touchPosition();
+            if(tp.x > this.x && tp.x < this.x + this.imageWidth() && tp.y > this.y && tp.y < this.y + this.imageHeight()){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public int imageWidth(){
+        Texture t = this.imgs.get(this.state);
+        if(t != null){
+            return t.getWidth();
+
+        }
+        return -1;
+    }
+
+    public int imageHeight(){
+        Texture t = this.imgs.get(this.state);
+        if(t != null){
+            return t.getHeight();
+
+        }
+        return -1;
     }
 
     public void dispose(){

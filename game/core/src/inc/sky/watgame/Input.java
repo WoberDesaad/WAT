@@ -1,5 +1,6 @@
 package inc.sky.watgame;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 
 public class Input implements InputProcessor {
@@ -38,7 +39,7 @@ public class Input implements InputProcessor {
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         if(pointer == 0) {
             this.touchX = screenX;
-            this.touchY = screenY;
+            this.touchY = Gdx.graphics.getHeight() - screenY;
             this.isTouching = true;
         }
         return false;

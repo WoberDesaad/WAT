@@ -41,6 +41,7 @@ public class PlayState extends State {
         //TODO: Draw Background
         //TODO: Draw Board
         font.draw(batch, "fps: " + Float.toString(1/dt), 100, ScreenY-100);
+        font.draw(batch, "Score: " + Integer.toString(ScoreBoard.getScoreBoard().getScore()), 100, ScreenY- 200);
         gb.render(batch);
         //TODO: Draw GUI
         batch.end();
