@@ -75,17 +75,17 @@ public class Hole {
                 }
                 break;
             case occupied:
-                stateTime += dt;
-                if(stateTime > 2){
+                this.stateTime += dt;
+
+                if(this.stateTime >= 2){
                     this.state = states.movingDown;
-                    stateTime = 0;
+                    this.stateTime = 0;
+                }else if(this.isHit()){
+                    this.state = states.hit;
+                    ScoreBoard.getScoreBoard().addToScore((int)(10.0f * (2.0f / (2.0f - this.stateTime))));
+                    this.stateTime = 0;
                 }
 
-                if(this.isHit()){
-                    this.state = states.hit;
-                    this.stateTime = 0;
-                    ScoreBoard.getScoreBoard().addToScore(10);
-                }
                 break;
             case hit:
                 stateTime += dt;

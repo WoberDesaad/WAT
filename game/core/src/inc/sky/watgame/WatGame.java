@@ -10,16 +10,16 @@ public class WatGame extends ApplicationAdapter {
 
 	@Override
 	public void create () {
-		i = new Input();
+		this.i = new Input();
 		Gdx.input.setInputProcessor(i);
-		sm = new StateManager();
-		sm.putState(new PlayState(i));
+		this.sm = new StateManager();
+		this.sm.putState(new PlayState(i));
 	}
 
 	@Override
 	public void render () {
-		dt = Gdx.graphics.getDeltaTime();
-		sm.getCurrentState().render(dt);
+		this.dt = Gdx.graphics.getDeltaTime();
+		this.sm.getCurrentState().render(dt);
 	}
 
 	@Override

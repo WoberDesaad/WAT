@@ -22,7 +22,7 @@ public class PlayState extends State {
         batch = new SpriteBatch();
         font = new BitmapFont();
         font.getData().setScale(8.0f);
-        gb = new GameBoard(3, 3, ( ScreenX - 900 ) / 2, 0, 900, 900, i);
+        gb = new GameBoard(3, 3 , ( ScreenX - 900 ) / 2, 0, 900, 900, i);
     }
 
     @Override
