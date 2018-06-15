@@ -3,10 +3,19 @@ package inc.sky.watgame;
 import java.util.Stack;
 
 public class StateManager {
+    static StateManager sm;
+
     Stack<State> stateStack;
 
     public StateManager(){
         this.stateStack = new Stack<State>();
+    }
+
+    public static StateManager getStateManager(){
+        if(sm == null){
+            sm = new StateManager();
+        }
+        return sm;
     }
 
     public void putState(State s){
