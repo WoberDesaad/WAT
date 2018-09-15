@@ -6,6 +6,7 @@ public class StateManager {
     static StateManager sm;
 
     Stack<State> stateStack;
+    State tmp;
 
     public StateManager(){
         this.stateStack = new Stack<State>();
@@ -33,7 +34,15 @@ public class StateManager {
         stateStack.push(s);
     }
 
+    public void changeState(State s){
+        tmp = s;
+    }
+
     public State getCurrentState(){
+        if(tmp != null){
+            swapState(tmp);
+            tmp = null;
+        }
         return stateStack.peek();
     }
 

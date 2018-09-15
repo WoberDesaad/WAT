@@ -2,13 +2,14 @@ package inc.sky.watgame;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
 
-public class Hole {
+public class Hole extends InputListener {
     public enum states{
         empty,
         movingUp,
@@ -24,10 +25,7 @@ public class Hole {
 
     private HashMap<states, Texture> imgs;
 
-    Input in;
-
-    public Hole(int x, int y, int width, int height, Input in){
-        this.in = in;
+    public Hole(int x, int y, int width, int height){
         imgs = new HashMap<states, Texture>();
         imgs.put(states.empty, new Texture("black.jpg"));
         imgs.put(states.movingUp, new Texture("yellow.jpg"));
@@ -115,12 +113,12 @@ public class Hole {
     }
 
     public boolean isHit(){
-        if(this.in.isTouching()){
-            Point tp = in.touchPosition();
-            if(tp.x > this.x && tp.x < this.x + this.imageWidth() && tp.y > this.y && tp.y < this.y + this.imageHeight()){
-                return true;
-            }
-        }
+        //if(this.in.isTouching()){
+        //    Point tp = in.touchPosition();
+        //    if(tp.x > this.x && tp.x < this.x + this.imageWidth() && tp.y > this.y && tp.y < this.y + this.imageHeight()){
+        //        return true;
+        //    }
+        //}
         return false;
     }
 
