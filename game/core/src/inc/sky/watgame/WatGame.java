@@ -11,7 +11,7 @@ public class WatGame extends ApplicationAdapter {
 	public void create () {
 		this.i = new Input();
 		Gdx.input.setInputProcessor(i);
-		StateManager.getStateManager().putState(new MenuState(i));
+		StateManager.getStateManager().pushState(new MenuState(i));
 	}
 
 	@Override

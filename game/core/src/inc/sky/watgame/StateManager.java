@@ -18,7 +18,7 @@ public class StateManager {
         return sm;
     }
 
-    public void putState(State s){
+    public void pushState(State s){
         stateStack.push(s);
     }
 
